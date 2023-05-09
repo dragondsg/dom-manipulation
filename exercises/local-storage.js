@@ -38,3 +38,58 @@
  */
 
 // Your code goes here...
+
+const itemBoxes = document.querySelectorAll('.card');
+
+function addToFavs (elm) {
+	elm.dataset.fav = 'true';
+	elm.setAttribute('style', 'background-color: red;');
+}
+function moveFromFavs (elm) {
+	elm.dataset.fav = 'false';
+	elm.setAttribute('style', 'background-color: white;');
+}
+
+function getLocal () {
+	let storageData = localStorage.getItem('favorites');
+	if (storageData) return storageData.split(',');
+	else return [];
+}
+function addToLocal (elm) {
+	let elmId = elm.getAttribute('id');
+	let storageData = localStorage.getItem('favorites');
+	if (storageData) {
+		storageData += `,${elmId}`;
+		localStorage.setItem('favorites', storageData);
+	} else {
+		localStorage.setItem('favorites', elmId);
+	}
+}
+function removeFromLocal (elm) {
+	let elmId = elm.getAttribute('id');
+	let favList = getLocal();
+	favList.splice(favList.indexOf(elmId), 1).join(',');
+	localStorage.setItem('favorites', favList);
+}
+
+function pageLoad () {
+	let favList = getLocal();
+	for (let itemId of favList) {
+		let item = document.getElementById(itemId);
+		addToFavs(item);
+	}
+}
+function update (elm) {
+	if (elm.dataset.fav == 'true') {
+		moveFromFavs(elm);
+		removeFromLocal(elm);
+	} else {
+		addToFavs(elm);
+		addToLocal(elm);
+	}
+}
+
+pageLoad();
+for (let item of itemBoxes) {
+	item.addEventListener('click', () => { update(item); });
+}

@@ -12,7 +12,7 @@
  */
 
 // Your code goes here...
-
+const allItems = document.querySelectorAll('.item');
 
 
 /**
@@ -23,7 +23,7 @@
  * */
 
 // Your code goes here
-
+const main = document.getElementById('main');
 
 
 /**
@@ -34,7 +34,7 @@
  */
 
 // Your code goes here
-
+const favs = document.getElementById('favs');
 
 
 /**
@@ -47,7 +47,18 @@
  */
 
 // Your code goes here
-
+function updateCollections(id, direction) {
+	const movingItem = document.getElementById(id);
+	const icon = movingItem.querySelector('.fa-solid');
+	icon.classList.remove('fa-heart-circle-plus', 'fa-heart-crack');
+	if (direction == 'toMain') {
+		main.append(movingItem);
+		icon.classList.add('fa-heart-circle-plus');
+	} else if (direction == 'toFavs') {
+		favs.append(movingItem);
+		icon.classList.add('fa-heart-crack');
+	} else { console.log('Error, wrong argument!'); }
+}
 
 
 /**
@@ -65,5 +76,12 @@
  */
 
 // Your code goes here...
-
+for (let elm of allItems) {
+	elm.addEventListener('click', () => {
+		let parentId = elm.parentElement.getAttribute('id');
+		let id = elm.getAttribute('id');
+		let destination = parentId == 'main' ? 'toFavs' : 'toMain';
+		updateCollections(id, destination);
+	});
+}
 
