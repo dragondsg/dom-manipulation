@@ -38,7 +38,7 @@
  */
 
 // Your code goes here...
-
+const container = document.querySelector('.cardsContainer');
 const itemBoxes = document.querySelectorAll('.card');
 
 function addToFavs (elm) {
@@ -89,7 +89,14 @@ function update (elm) {
 	}
 }
 
+function callback (e) {
+	const item = e.target;
+	if (Array.from(item.classList).includes('card')) {
+		update(item);
+	}
+}
+
 pageLoad();
 for (let item of itemBoxes) {
-	item.addEventListener('click', () => { update(item); });
+	container.addEventListener('click', callback);
 }
